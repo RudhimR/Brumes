@@ -1,4 +1,4 @@
-# Quantum-Aware AI Context Oracle for Web3 Agents
+#Brumes -- Quantum-Aware AI Context Oracle for Web3 Agents
 
 ## Project Overview
 This project implements a system where AI Agents can communicate using a shared language (Model Context Protocol - MCP), access verifiable random information from a quantum source, and record interactions on a public Web3 ledger.
