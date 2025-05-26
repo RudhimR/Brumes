@@ -3,6 +3,13 @@
 ## Project Overview
 This project implements a system where AI Agents can communicate using a shared language (Model Context Protocol - MCP), access verifiable random information from a quantum source, and record interactions on a public Web3 ledger.
 
+## Simplified Explanation
+Imagine you have a super smart helper (that's the AI part) for things on the internet that use special secret codes (that's the Web3 part).
+Now, sometimes these secret codes could be broken by super-duper powerful future computers called "quantum computers."
+So, this special helper (the AI) is also "quantum-aware." This means it understands that these super-duper computers might exist one day.
+And this helper is like a "context oracle." Think of an oracle as someone who gives wise advice. This helper gives smart advice based on the situation ("context") about these Web3 things, keeping in mind that quantum computers might be able to crack some of the codes in the future.
+So, it's like a smart helper for the future of the internet that knows about super-powerful computers!
+
 ## System Architecture
 The system consists of several key components:
 1. **Frontend dApp**: User interface for interacting with the system
