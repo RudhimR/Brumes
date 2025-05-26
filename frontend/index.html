@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum-Aware AI Context Oracle</title>
+    <style>
+        :root {
+            --primary-color: #6200ea;
+            --secondary-color: #03dac6;
+            --background-color: #121212;
+            --surface-color: #1e1e1e;
+            --on-background: #ffffff;
+            --on-surface: #e0e0e0;
+            --error-color: #cf6679;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--on-background);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .card {
+            background-color: var(--surface-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1, h2, h3 {
+            color: var(--secondary-color);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #7c4dff;
+        }
+        
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #2d2d2d;
+            color: var(--on-surface);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--on-surface);
+        }
+        
+        .result-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #2d2d2d;
+            display: none;
+        }
+        
+        .result-container.active {
+            display: block;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: var(--surface-color);
+            color: var(--on-surface);
+            border: none;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--secondary-color);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .transaction-hash {
+            word-break: break-all;
+            font-family: monospace;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .provenance-trail {
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .provenance-item {
+            padding: 10px;
+            border-left: 3px solid var(--secondary-color);
+            margin-bottom: 10px;
+            background-color: #2a2a2a;
+        }
+        
+        .quantum-result {
+            font-size: 2rem;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--secondary-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 1px solid #333;
+            color: #888;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Quantum-Aware AI Context Oracle</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h1>Web3 Quantum Random Number Generator</h1>
+            <p>Generate truly random numbers using quantum principles and record them on the blockchain.</p>
+            
+            <div class="tabs">
+                <button class="tab active" data-tab="generate">Generate Random Number</button>
+                <button class="tab" data-tab="history">View History</button>
+                <button class="tab" data-tab="about">About</button>
+            </div>
+            
+            <div class="tab-content active" id="generate">
+                <div class="form-group">
+                    <label for="min">Minimum Value:</label>
+                    <input type="number" id="min" value="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="max">Maximum Value:</label>
+                    <input type="number" id="max" value="100">
+                </div>
+                
+                <div class="form-group">
+                    <label for="format">Number Format:</label>
+                    <select id="format">
+                        <option value="integer">Integer</option>
+                        <option value="float">Float</option>
+                        <option value="binary">Binary</option>
+                    </select>
+                </div>
+                
+                <button id="generate-btn">Generate Quantum Random Number</button>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Generating quantum random number...</p>
+                </div>
+                
+                <div class="result-container" id="result-container">
+                    <h2>Result</h2>
+                    <div class="quantum-result" id="quantum-result">42</div>
+                    
+                    <div class="form-group">
+                        <label>Source:</label>
+                        <div id="result-source">quantum_simulator</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Timestamp:</label>
+                        <div id="result-timestamp">2025-05-25T09:45:10Z</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Transaction Hash:</label>
+                        <div class="transaction-hash" id="transaction-hash">0x43a59a5fe3916f8711345948608d1622659077dd65f659c2439501de1ef8c549</div>
+                    </div>
+                    
+                    <h3>Provenance Trail</h3>
+                    <div class="provenance-trail" id="provenance-trail">
+                        <div class="provenance-item">
+                            <div><strong>Timestamp:</strong> 2025-05-25T09:45:00Z</div>
+                            <div><strong>Agent:</strong> web-agent-001</div>
+                            <div><strong>Operation:</strong> requestQuantumRandom</div>
+                            <div><strong>Result:</strong> request_sent</div>
+                            <div><strong>Hash:</strong> 0x123abc456def</div>
+                        </div>
+                        <div class="provenance-item">
+                            <div><strong>Timestamp:</strong> 2025-05-25T09:45:10Z</div>
+                            <div><strong>Agent:</strong> quantum-agent-001</div>
+                            <div><strong>Operation:</strong> generateQuantumRandom</div>
+                            <div><strong>Result:</strong> success</div>
+                            <div><strong>Hash:</strong> 0x789ghi101jkl</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="history">
+                <h2>Session History</h2>
+                <p>View the history of quantum random number generation sessions.</p>
+                
+                <div class="form-group">
+                    <label for="session-id">Session ID:</label>
+                    <input type="text" id="session-id" placeholder="Enter session ID">
+                </div>
+                
+                <button id="lookup-btn">Look Up Session</button>
+                
+                <div class="loading" id="history-loading">
+                    <div class="spinner"></div>
+                    <p>Loading session data...</p>
+                </div>
+                
+                <div class="result-container" id="history-container">
+                    <h3>Session Details</h3>
+                    <div id="session-details">
+                        <div><strong>Session ID:</strong> <span id="history-session-id">session-123456</span></div>
+                        <div><strong>Created At:</strong> <span id="history-created-at">2025-05-25T09:45:00Z</span></div>
+                        <div><strong>Task Goal:</strong> <span id="history-task-goal">Generate a quantum random number</span></div>
+                        <div><strong>Status:</strong> <span id="history-status">Completed</span></div>
+                    </div>
+                    
+                    <h3>Quantum Events</h3>
+                    <div id="quantum-events">
+                        <div class="provenance-item">
+                            <div><strong>Random Number:</strong> 42</div>
+                            <div><strong>Timestamp:</strong> 2025-05-25T09:45:10Z</div>
+                            <div><strong>Source:</strong> quantum_simulator</div>
+                            <div><strong>Provenance Hash:</strong> 0x789ghi101jkl</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="about">
+                <h2>About the Quantum-Aware AI Context Oracle</h2>
+                <p>This system demonstrates the integration of quantum random number generation, AI agents, and blockchain technology.</p>
+                
+                <h3>Key Components</h3>
+                <ul>
+                    <li><strong>Model Context Protocol (MCP):</strong> A shared language for AI agents to communicate</li>
+                    <li><strong>MCP Gateway:</strong> Central hub for routing messages between components</li>
+                    <li><strong>AI Agent Layer:</strong> Specialized AI agents that process MCP messages</li>
+                    <li><strong>Quantum Backend:</strong> Generates truly random numbers using quantum principles</li>
+                    <li><strong>Blockchain / Smart Contracts:</strong> Provides a transparent and unchangeable public ledger</li>
+                    <li><strong>Decentralized Storage:</strong> Stores detailed MCP context logs permanently</li>
+                </ul>
+                
+                <p>This project demonstrates how these technologies can work together to create a trustworthy and verifiable system for AI agents to access quantum randomness.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>Quantum-Aware AI Context Oracle for Web3 Agents &copy; 2025</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Generate random number
+            const generateBtn = document.getElementById('generate-btn');
+            const loading = document.getElementById('loading');
+            const resultContainer = document.getElementById('result-container');
+            
+            generateBtn.addEventListener('click', () => {
+                const min = parseInt(document.getElementById('min').value);
+                const max = parseInt(document.getElementById('max').value);
+                const format = document.getElementById('format').value;
+                
+                // Show loading, hide result
+                loading.classList.add('active');
+                resultContainer.classList.remove('active');
+                
+                // Simulate API call to our backend
+                setTimeout(() => {
+                    // Hide loading, show result
+                    loading.classList.remove('active');
+                    resultContainer.classList.add('active');
+                    
+                    // Generate a random number (in a real app, this would come from our quantum backend)
+                    let result;
+                    if (format === 'integer') {
+                        result = Math.floor(Math.random() * (max - min + 1)) + min;
+                    } else if (format === 'float') {
+                        result = (Math.random() * (max - min) + min).toFixed(4);
+                    } else if (format === 'binary') {
+                        const length = 8;
+                        result = '';
+                        for (let i = 0; i < length; i++) {
+                            result += Math.random() > 0.5 ? '1' : '0';
+                        }
+                    }
+                    
+                    // Update the UI with the result
+                    document.getElementById('quantum-result').textContent = result;
+                    document.getElementById('result-timestamp').textContent = new Date().toISOString();
+                    document.getElementById('transaction-hash').textContent = '0x' + Math.random().toString(16).substr(2, 64);
+                    
+                    // Update provenance trail
+                    const provenanceTrail = document.getElementById('provenance-trail');
+                    provenanceTrail.innerHTML = '';
+                    
+                    const requestTime = new Date();
+                    const responseTime = new Date(requestTime.getTime() + 100);
+                    
+                    const requestItem = document.createElement('div');
+                    requestItem.className = 'provenance-item';
+                    requestItem.innerHTML = `
+                        <div><strong>Timestamp:</strong> ${requestTime.toISOString()}</div>
+                        <div><strong>Agent:</strong> web-agent-001</div>
+                        <div><strong>Operation:</strong> requestQuantumRandom</div>
+                        <div><strong>Result:</strong> request_sent</div>
+                        <div><strong>Hash:</strong> 0x${Math.random().toString(16).substr(2, 12)}</div>
+                    `;
+                    provenanceTrail.appendChild(requestItem);
+                    
+                    const responseItem = document.createElement('div');
+                    responseItem.className = 'provenance-item';
+                    responseItem.innerHTML = `
+                        <div><strong>Timestamp:</strong> ${responseTime.toISOString()}</div>
+                        <div><strong>Agent:</strong> quantum-agent-001</div>
+                        <div><strong>Operation:</strong> generateQuantumRandom</div>
+                        <div><strong>Result:</strong> success</div>
+                        <div><strong>Hash:</strong> 0x${Math.random().toString(16).substr(2, 12)}</div>
+                    `;
+                    provenanceTrail.appendChild(responseItem);
+                    
+                }, 1500);
+            });
+            
+            // Look up session
+            const lookupBtn = document.getElementById('lookup-btn');
+            const historyLoading = document.getElementById('history-loading');
+            const historyContainer = document.getElementById('history-container');
+            
+            lookupBtn.addEventListener('click', () => {
+                const sessionId = document.getElementById('session-id').value;
+                
+                if (!sessionId) {
+                    alert('Please enter a session ID');
+                    return;
+                }
+                
+                // Show loading, hide result
+                historyLoading.classList.add('active');
+                historyContainer.classList.remove('active');
+                
+                // Simulate API call to our backend
+                setTimeout(() => {
+                    // Hide loading, show result
+                    historyLoading.classList.remove('active');
+                    historyContainer.classList.add('active');
+                    
+                    // Update the UI with the session details
+                    document.getElementById('history-session-id').textContent = sessionId;
+                    document.getElementById('history-created-at').textContent = new Date().toISOString();
+                    document.getElementById('history-task-goal').textContent = 'Generate a quantum random number';
+                    document.getElementById('history-status').textContent = 'Completed';
+                    
+                    // Update quantum events
+                    const quantumEvents = document.getElementById('quantum-events');
+                    quantumEvents.innerHTML = '';
+                    
+                    const eventItem = document.createElement('div');
+                    eventItem.className = 'provenance-item';
+                    eventItem.innerHTML = `
+                        <div><strong>Random Number:</strong> ${Math.floor(Math.random() * 100)}</div>
+                        <div><strong>Timestamp:</strong> ${new Date().toISOString()}</div>
+                        <div><strong>Source:</strong> quantum_simulator</div>
+                        <div><strong>Provenance Hash:</strong> 0x${Math.random().toString(16).substr(2, 12)}</div>
+                    `;
+                    quantumEvents.appendChild(eventItem);
+                    
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>

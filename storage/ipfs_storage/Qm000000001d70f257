@@ -1,0 +1,71 @@
+{
+  "modelInfo": {
+    "id": "quantum-agent-001",
+    "type": "QuantumAgent",
+    "capabilities": [
+      "quantumRandomness"
+    ],
+    "version": "1.0.0"
+  },
+  "contextDetails": {
+    "taskGoal": "Generate a quantum random number",
+    "environmentState": {
+      "timestamp": "2025-05-25T09:56:00Z",
+      "sessionId": "session-123456",
+      "variables": {
+        "min": 1,
+        "max": 100,
+        "format": "integer"
+      }
+    },
+    "permissions": {
+      "dataAccess": [
+        "quantumRandom"
+      ],
+      "operations": [
+        "generateRandom",
+        "readOnly"
+      ]
+    },
+    "provenanceTrail": [
+      {
+        "timestamp": "2025-05-25T09:56:00Z",
+        "agentId": "web-agent-001",
+        "operation": "requestQuantumRandom",
+        "result": "request_sent",
+        "hash": "0x123abc456def"
+      },
+      {
+        "timestamp": "2025-05-25T09:56:10Z",
+        "agentId": "quantum-agent-001",
+        "operation": "generateQuantumRandom",
+        "result": "success",
+        "hash": "0x789ghi101jkl"
+      }
+    ]
+  },
+  "outputStructure": {
+    "format": "json",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "randomNumber": {
+          "type": "integer"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "destination": "user"
+  },
+  "result": {
+    "randomNumber": 42,
+    "timestamp": "2025-05-25T09:56:10Z",
+    "source": "quantum_simulator"
+  }
+}

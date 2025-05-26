@@ -1,0 +1,143 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model Context Protocol",
+  "description": "Schema for context objects exchanged between agents and system components",
+  "type": "object",
+  "required": ["modelInfo", "contextDetails", "outputStructure"],
+  "properties": {
+    "modelInfo": {
+      "type": "object",
+      "description": "Information about the AI model or agent",
+      "required": ["id", "type", "capabilities"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the model or agent"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of model or agent",
+          "enum": ["LLM", "QuantumAgent", "WebAgent", "OracleAgent"]
+        },
+        "capabilities": {
+          "type": "array",
+          "description": "List of capabilities this model or agent has",
+          "items": {
+            "type": "string",
+            "enum": ["textGeneration", "quantumRandomness", "webAccess", "blockchainInteraction", "decentralizedStorage"]
+          }
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the model or agent"
+        }
+      }
+    },
+    "contextDetails": {
+      "type": "object",
+      "description": "Details about the current context and task",
+      "required": ["taskGoal", "environmentState", "permissions"],
+      "properties": {
+        "taskGoal": {
+          "type": "string",
+          "description": "Description of the task to be performed"
+        },
+        "environmentState": {
+          "type": "object",
+          "description": "Current state of the environment",
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO timestamp of when this context was created"
+            },
+            "sessionId": {
+              "type": "string",
+              "description": "Unique identifier for the current session"
+            },
+            "variables": {
+              "type": "object",
+              "description": "Key-value pairs of environment variables",
+              "additionalProperties": {
+                "type": ["string", "number", "boolean", "object", "array", "null"]
+              }
+            }
+          }
+        },
+        "permissions": {
+          "type": "object",
+          "description": "Access permissions for data and operations",
+          "properties": {
+            "dataAccess": {
+              "type": "array",
+              "description": "Types of data this context has permission to access",
+              "items": {
+                "type": "string",
+                "enum": ["userProfile", "quantumRandom", "blockchainData", "publicWeb"]
+              }
+            },
+            "operations": {
+              "type": "array",
+              "description": "Operations this context has permission to perform",
+              "items": {
+                "type": "string",
+                "enum": ["readOnly", "writeStorage", "sendTransaction", "generateRandom"]
+              }
+            }
+          }
+        },
+        "provenanceTrail": {
+          "type": "array",
+          "description": "Trail of operations and transformations performed on this context",
+          "items": {
+            "type": "object",
+            "required": ["timestamp", "agentId", "operation", "result"],
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "format": "date-time",
+                "description": "When this operation was performed"
+              },
+              "agentId": {
+                "type": "string",
+                "description": "ID of the agent that performed the operation"
+              },
+              "operation": {
+                "type": "string",
+                "description": "Description of the operation performed"
+              },
+              "result": {
+                "type": ["string", "number", "boolean", "object", "array", "null"],
+                "description": "Result of the operation"
+              },
+              "hash": {
+                "type": "string",
+                "description": "Hash of the previous state + operation, for verification"
+              }
+            }
+          }
+        }
+      }
+    },
+    "outputStructure": {
+      "type": "object",
+      "description": "Structure for the expected output",
+      "properties": {
+        "format": {
+          "type": "string",
+          "description": "Format of the expected output",
+          "enum": ["text", "json", "binary", "quantumRandom"]
+        },
+        "schema": {
+          "type": ["object", "string"],
+          "description": "Schema for the expected output, if applicable"
+        },
+        "destination": {
+          "type": "string",
+          "description": "Where the output should be sent",
+          "enum": ["user", "blockchain", "decentralizedStorage", "anotherAgent"]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "mcp-gateway",
+  "version": "1.0.0",
+  "description": "Basic MCP Gateway for Quantum-Aware AI Context Oracle",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2"
+  }
+}

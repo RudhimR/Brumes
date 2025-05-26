@@ -1,0 +1,73 @@
+{
+  "modelInfo": {
+    "id": "test-agent-001",
+    "type": "OracleAgent",
+    "capabilities": [
+      "textGeneration",
+      "quantumRandomness"
+    ],
+    "version": "1.0.0"
+  },
+  "contextDetails": {
+    "taskGoal": "Generate a quantum random number",
+    "environmentState": {
+      "timestamp": "2025-05-26T10:54:12.180Z",
+      "sessionId": "session-123456",
+      "variables": {
+        "min": 1,
+        "max": 100,
+        "format": "integer"
+      }
+    },
+    "permissions": {
+      "dataAccess": [
+        "quantumRandom"
+      ],
+      "operations": [
+        "generateRandom",
+        "readOnly"
+      ]
+    },
+    "provenanceTrail": [
+      {
+        "timestamp": "2025-05-26T10:54:12.089Z",
+        "agentId": "test-agent-001",
+        "operation": "receiveMessage",
+        "result": "processing",
+        "hash": "0x4dac6692"
+      },
+      {
+        "timestamp": "2025-05-26T10:54:12.179Z",
+        "agentId": "test-agent-001",
+        "operation": "requestQuantumRandom",
+        "result": "success",
+        "hash": "0x3a90763c"
+      }
+    ]
+  },
+  "outputStructure": {
+    "format": "json",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "randomNumber": {
+          "type": "integer"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "destination": "user"
+  },
+  "message": "Quantum random number generated",
+  "result": {
+    "randomNumber": 30,
+    "timestamp": "2025-05-26T10:54:12.171Z",
+    "source": "quantum_simulator"
+  }
+}
